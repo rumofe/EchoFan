@@ -39,6 +39,19 @@ export const LANGUAGES: Language[] = [
   { code: "intl", name: "Internacional", store: "us", flag: "🌍" },
 ];
 
+// Los géneros genéricos (Rock, Pop...) están dominados por música en inglés en
+// TODAS las tiendas. Para "español" de verdad usamos los géneros latinos de iTunes.
+const SPANISH_GENRE_IDS: Record<number, number> = {
+  14: 1119, // Pop -> Pop Latino
+  21: 1124, // Rock -> Alternativo & Rock Latino
+};
+const LATINO_GENRE_ID = 12; // "Latino": música en español en general
+
+function resolveGenreId(genre: Genre, language: Language): number {
+  if (language.code === "es") return SPANISH_GENRE_IDS[genre.id] ?? LATINO_GENRE_ID;
+  return genre.id;
+}
+
 export type ChallengeSource =
   | { type: "artist"; artist: Artist }
   | { type: "artists"; artists: Artist[] }
@@ -96,7 +109,7 @@ export async function loadSourceTracks(s: ChallengeSource): Promise<Track[]> {
       return dedupeTracks(interleaved);
     }
     case "genre":
-      return dedupeTracks(await fetchGenreTracks(s.genre.id, s.language.store));
+      return dedupeTracks(await fetchGenreTracks(resolveGenreId(s.genre, s.language), s.language.store));
     case "charts":
       return dedupeTracks(await fetchChartsTracks(s.language.store));
   }

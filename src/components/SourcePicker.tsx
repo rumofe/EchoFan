@@ -178,7 +178,7 @@ function LanguagePicker({ language, onChange }: { language: Language; onChange: 
           </button>
         ))}
       </div>
-      <p className="hint">Aproximado: usa la tienda de ese idioma, mezcla algún hit internacional.</p>
+      <p className="hint">🇪🇸 Español usa géneros latinos (música en español de verdad). Otros idiomas usan la tienda de ese país, donde el rock/pop tira a inglés.</p>
     </div>
   );
 }
